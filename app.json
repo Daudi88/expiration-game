@@ -2,6 +2,7 @@
   "expo": {
     "name": "expiration-game",
     "slug": "expiration-game",
+    "userInterfaceStyle": "automatic",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
