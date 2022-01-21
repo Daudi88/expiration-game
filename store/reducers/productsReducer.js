@@ -20,7 +20,7 @@ const productsReducer = (state = initialState, action) => {
         action.productData.id,
         action.productData.title,
         action.productData.imageUrl,
-        action.productData.price,
+        action.productData.weight,
         action.productData.expirationDate
       );
       return {

@@ -46,10 +46,16 @@ const LeaderboardScreen = ({ navigation }) => {
               : styles.middleCard,
           ]}
         >
-          <CustomText bold style={{ fontSize: 20 }}>
-            {index + 1}. {item.username}
+          <CustomText style={{ fontSize: 16 }}>
+            {index + 1}. <CustomText bold>{item.username}</CustomText>
           </CustomText>
-          <CustomText bold style={{ fontSize: 18 }}>
+          <CustomText
+            bold
+            style={{
+              fontSize: 16,
+              color: item.score >= 0 ? Colors.primary : "red",
+            }}
+          >
             {item.score}
           </CustomText>
         </View>
@@ -89,7 +95,7 @@ const styles = StyleSheet.create({
   card: {
     width: "90%",
     backgroundColor: "white",
-    padding: 10,
+    padding: 12,
     flexDirection: "row",
     justifyContent: "space-between",
   },

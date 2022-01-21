@@ -28,7 +28,6 @@ const userReducer = (state = initialState, action) => {
     case SET_USERS:
       return {
         ...state,
-        currentUser: action.users.find(user => user.id === state.userId),
         users: action.users,
       };
     case MANAGE_POINTS:

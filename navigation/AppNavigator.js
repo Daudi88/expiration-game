@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../data/firebase-config";
-import * as userActions from "../store/actions/usersActions";
+import * as usersActions from "../store/actions/usersActions";
 
 import StartupScreen from "../screens/StartupScreen";
 import AuthScreen from "../screens/AuthScreen";
@@ -19,10 +19,9 @@ const AppNavigator = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, user => {
       if (user) {
-        dispatch(userActions.addUserId(user.uid));
+        dispatch(usersActions.addUserId(user.uid));
       }
-
-      dispatch(userActions.tryAutoLogin());
+      dispatch(usersActions.tryAutoLogin());
     });
     return unsubscribe;
   });

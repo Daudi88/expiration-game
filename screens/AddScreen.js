@@ -17,20 +17,22 @@ import DatePicker from "../components/DatePicker";
 import CustomButton from "../components/CustomButton";
 import Error from "../components/Error";
 import Link from "../components/Link";
+import { auth } from "../data/firebase-config";
 
 const AddScreen = props => {
   const [product, setProduct] = useState({
-    ean: "",
     title: "",
     imageUrl: "",
-    price: 10,
+    weight: 500,
     expirationDate: "",
   });
 
   const [isScanned, setIsScanned] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [error, setError] = useState(null);
-  const user = useSelector(state => state.users.currentUser);
+  const user = useSelector(state =>
+    state.users.users.find(user => user.id === auth.currentUser.uid)
+  );
   const dispatch = useDispatch();
 
   const submitHandler = () => {
@@ -50,10 +52,9 @@ const AddScreen = props => {
       dispatch(
         productsActions.addProductToUser(
           user.id,
-          product.ean,
           product.title,
           product.imageUrl,
-          product.price,
+          product.weight,
           product.expirationDate
         )
       );
@@ -103,9 +104,8 @@ const AddScreen = props => {
                 autoCapitalize="words"
                 onChangeText={text => {
                   productChangeHandler("title", text);
-                  productChangeHandler("ean", "");
                   productChangeHandler("imageUrl", "");
-                  productChangeHandler("price", 10);
+                  productChangeHandler("weight", 10);
                   setError(null);
                 }}
               />

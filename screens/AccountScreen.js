@@ -9,7 +9,9 @@ import CustomText from "../components/CustomText";
 import Colors from "../constants/Colors";
 
 const AccountScreen = () => {
-  const user = useSelector(state => state.users.currentUser);
+  const user = useSelector(state =>
+    state.users.users.find(user => user.id === auth.currentUser.uid)
+  );
   const dispatch = useDispatch();
 
   const handleSignOut = () => {
@@ -27,13 +29,15 @@ const AccountScreen = () => {
         Du har{" "}
         <CustomText
           bold
-          style={{ color: user.score >= 0 ? Colors.primary : "red" }}
+          style={{ color: user?.score >= 0 ? Colors.primary : "red" }}
         >
-          {user.score}
+          {user?.score}
         </CustomText>{" "}
         poäng
       </CustomText>
-      <CustomText style={styles.text}>Inloggad som: {user.username}</CustomText>
+      <CustomText style={styles.text}>
+        Inloggad som: {user?.username}
+      </CustomText>
       <CustomButton
         style={{ backgroundColor: "red" }}
         title="Logga ut"

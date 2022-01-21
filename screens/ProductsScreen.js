@@ -19,16 +19,20 @@ import ProductCard from "../components/ProductCard";
 import AddScreen from "./AddScreen";
 import CustomButton from "../components/CustomButton";
 import * as productsActions from "../store/actions/productsActions";
-import * as userActions from "../store/actions/usersActions";
+import * as usersActions from "../store/actions/usersActions";
 import Colors from "../constants/Colors";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { auth } from "../data/firebase-config";
 
 const ProductsScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const user = useSelector(state => state.users.currentUser);
+  const userId = useSelector(state => state.users.userId);
+  const user = useSelector(state =>
+    state.users.users.find(user => user.id === userId)
+  );
   const products = useSelector(state => state.products.userProducts);
   const dispatch = useDispatch();
 
@@ -44,7 +48,7 @@ const ProductsScreen = ({ navigation }) => {
     setError(null);
     setIsRefreshing(true);
     try {
-      dispatch(productsActions.fetchProducts(user.id));
+      dispatch(productsActions.fetchProducts(userId));
     } catch (error) {
       setError("Någonting gick fel!\nDra för att uppdatera");
     } finally {
@@ -54,7 +58,7 @@ const ProductsScreen = ({ navigation }) => {
 
   useEffect(() => {
     setIsLoading(true);
-    dispatch(userActions.fetchUsers());
+    dispatch(usersActions.fetchUsers());
     loadProducts().then(() => setIsLoading(false));
   }, [loadProducts]);
 
@@ -99,7 +103,7 @@ const ProductsScreen = ({ navigation }) => {
         length={products.length}
         image={itemData.item.imageUrl}
         title={itemData.item.title}
-        price={itemData.item.price}
+        weight={itemData.item.weight}
         expirationDate={itemData.item.expirationDate}
         onProductDelete={handleProductDelete}
         closeRow={closeRow}
@@ -111,8 +115,8 @@ const ProductsScreen = ({ navigation }) => {
   const handleProductDelete = (index, newPoints) => {
     const product = products[index];
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    dispatch(productsActions.removeProductFromUser(user.id, product.id));
-    dispatch(userActions.managePoints(user.id, user.points + newPoints));
+    dispatch(productsActions.removeProductFromUser(userId, product.id));
+    dispatch(usersActions.managePoints(userId, user.points + newPoints));
   };
 
   if (isLoading) {
@@ -144,7 +148,7 @@ const ProductsScreen = ({ navigation }) => {
           onRefresh={loadProducts}
           refreshing={isRefreshing}
           ListHeaderComponent={<Header title="Matvaror" />}
-          contentContainerStyle={{ paddingBottom: 110 }}
+          contentContainerStyle={styles.cardsContainer}
           data={products.sort(
             (a, b) => new Date(a.expirationDate) - new Date(b.expirationDate)
           )}
@@ -171,7 +175,7 @@ const ProductsScreen = ({ navigation }) => {
         animationType="slide"
         visible={showModal}
       >
-        <AddScreen setShowModal={setShowModal} userId={user.id} />
+        <AddScreen setShowModal={setShowModal} userId={userId} />
       </Modal>
     </SafeAreaView>
   );
@@ -184,6 +188,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.secondary,
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+  },
+  cardsContainer: {
+    height: "100%",
+    paddingBottom: 110,
   },
   centered: {
     flex: 1,

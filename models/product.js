@@ -1,9 +1,9 @@
 class Product {
-  constructor(id, title, imageUrl, price, expirationDate) {
+  constructor(id, title, imageUrl, weight, expirationDate) {
     this.id = id;
     this.title = title;
     this.imageUrl = imageUrl;
-    this.price = price;
+    this.weight = weight;
     this.expirationDate = expirationDate;
   }
 }

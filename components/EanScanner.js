@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { StyleSheet, Dimensions, View } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import { collection, doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "../data/firebase-config";
+import { DABAS_API_KEY } from "@env";
 import axios from "axios";
 
 // From official docs https://reactnative.dev/docs/dimensions
@@ -27,60 +26,34 @@ const EanScanner = props => {
    */
   const barCodeScannedHandler = async ({ data }) => {
     props.setIsScanned(true);
-
-    // Checks if product already exists on firebase.
-    // If so it gets info from there and returns.
-    // Code from https://firebase.google.com/docs/firestore/query-data/get-data?authuser=1#get_a_document
-    const docRef = doc(db, "products", data);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      const doc = docSnap.data();
-      props.setProduct(prevState => ({
-        ...prevState,
-        ean: data,
-        title: doc.title,
-        imageUrl: doc.imageUrl,
-        price: doc.price,
-      }));
-
-      props.setError(null);
-      return;
-    }
-
-    // axios
-    //   .get(
-    //     "https://api.dabas.com/DABASService/V2/article/gtin/07300327872001/json?apikey=${DABAS_API_KEY}"
-    //   )
-    //   .then(response => console.log(response));
-
-    const productsRef = collection(db, "products");
     axios
-      .get(`https://handla.api.ica.se/api/upclookup?upc=${data}`)
+      .get(
+        `https://api.dabas.com/DABASService/V2/article/gtin/0${data}/JSON?apikey=${DABAS_API_KEY}`
+      )
       .then(response => {
-        const title = response.data.Items[0].ItemDescription;
+        if (response.data !== "") {
+          props.setProduct(prevState => ({
+            ...prevState,
+            title: response.data?.Artikelbenamning,
+            imageUrl: response.data?.Bilder[0].Lank,
+            weight: response.data?.Bruttovikt,
+          }));
+        } else {
+          throw new Error(
+            "Det finns ingen information om den här varan.\nDu får lägga till varan manuellt."
+          );
+        }
 
-        setDoc(doc(productsRef, data), {
-          title: title,
-          imageUrl: "",
-          price: 10,
-        });
-
-        props.setProduct(prevState => ({
-          ...prevState,
-          ean: data,
-          title: title,
-        }));
         props.setError(null);
       })
-      .catch(() => {
-        setDoc(doc(productsRef, data), {
+      .catch(error => {
+        props.setError(error.message);
+        props.setProduct(prevState => ({
+          ...prevState,
           title: "",
           imageUrl: "",
-          price: 10,
-        });
-        props.setError(
-          "Det finns ingen information om den här varan.\nDu får lägga till varan manuellt."
-        );
+          weight: 500,
+        }));
       });
   };
 

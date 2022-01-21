@@ -35,6 +35,19 @@ const ProductCard = props => {
     isExpired = true;
   }
 
+  let points;
+  if (props.weight <= 1000) {
+    points = 2;
+  } else if (props.weight <= 2000) {
+    points = 4;
+  } else if (props.weight <= 3000) {
+    points = 6;
+  } else if (props.weight <= 4000) {
+    points = 8;
+  } else {
+    points = 10;
+  }
+
   // https://www.youtube.com/watch?v=JxN9W9PRlUQ
   const LeftActions = () => {
     return (
@@ -43,16 +56,13 @@ const ProductCard = props => {
           style={styles.action}
           activeOpacity={0.5}
           onPress={() =>
-            props.onProductDelete(
-              props.index,
-              isExpired ? 0 : Math.round(props.price * 0.25)
-            )
+            props.onProductDelete(props.index, isExpired ? 0 : points)
           }
         >
           <FontAwesome name="check" size={30} color="white" />
           <CustomText style={styles.stateText}>Förbrukad</CustomText>
           <CustomText bold style={{ color: "white" }}>
-            +{isExpired ? 0 : Math.round(props.price * 0.25)}p
+            +{isExpired ? 0 : points}p
           </CustomText>
         </TouchableOpacity>
       </View>
@@ -69,16 +79,13 @@ const ProductCard = props => {
             style={styles.action}
             activeOpacity={0.5}
             onPress={() =>
-              props.onProductDelete(
-                props.index,
-                isExpired ? 0 : Math.round(props.price * 0.125)
-              )
+              props.onProductDelete(props.index, isExpired ? 0 : points / 2)
             }
           >
             <FontAwesome name="trash-o" size={30} color="white" />
             <CustomText style={styles.stateText}>Öppnad</CustomText>
             <CustomText bold style={{ color: "white" }}>
-              +{isExpired ? 0 : Math.floor(props.price * 0.125)}p
+              +{isExpired ? 0 : points / 2}p
             </CustomText>
           </TouchableOpacity>
         </View>
@@ -86,17 +93,12 @@ const ProductCard = props => {
           <TouchableOpacity
             style={styles.action}
             activeOpacity={0.5}
-            onPress={() =>
-              props.onProductDelete(
-                props.index,
-                -Math.round(props.price * 0.25)
-              )
-            }
+            onPress={() => props.onProductDelete(props.index, -points)}
           >
             <FontAwesome name="trash-o" size={30} color="white" />
             <CustomText style={styles.stateText}>Obruten</CustomText>
             <CustomText bold style={{ color: "white" }}>
-              -{Math.round(props.price * 0.25)}p
+              -{points}p
             </CustomText>
           </TouchableOpacity>
         </View>
@@ -139,7 +141,7 @@ const ProductCard = props => {
                 source={
                   props.image === ""
                     ? {
-                        uri: "https://cdn0.iconfinder.com/data/icons/shopping-and-retail-01-line-1/128/groceries_food_supermarket_shop_bazaar_marketplace_element_healthy_product_consumer_daily-use-item-512.png",
+                        uri: "https://static.vecteezy.com/system/resources/previews/004/458/389/non_2x/dairy-products-flat-linear-long-shadow-icon-yogurt-bottle-and-glass-of-milk-eggs-and-cheese-grocery-store-items-line-symbol-vector.jpg",
                       }
                     : { uri: props.image }
                 }
