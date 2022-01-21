@@ -1,7 +1,7 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import ReduxThunk from "redux-thunk";
-import userReducer from "./store/reducers/userReducer";
+import userReducer from "./store/reducers/usersReducer";
 import productsReducer from "./store/reducers/productsReducer";
 import AppLoading from "expo-app-loading";
 import {
@@ -14,7 +14,7 @@ import AppNavigator from "./navigation/AppNavigator";
 
 // Takes care of combining all reducers into one root reducer
 const rootReducer = combineReducers({
-  user: userReducer,
+  users: userReducer,
   products: productsReducer,
 });
 

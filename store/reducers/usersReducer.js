@@ -2,14 +2,14 @@ import {
   MANAGE_POINTS,
   ADD_USER_ID,
   TRY_AUTO_LOGIN,
-  SET_USER,
-} from "../actions/userActions";
+  SET_USERS,
+} from "../actions/usersActions";
 
 const initialState = {
   userId: null,
   tryAutoLogin: false,
-  username: "",
-  points: 0,
+  currentUser: {},
+  users: [],
 };
 
 const userReducer = (state = initialState, action) => {
@@ -25,11 +25,11 @@ const userReducer = (state = initialState, action) => {
         ...state,
         tryAutoLogin: true,
       };
-    case SET_USER:
+    case SET_USERS:
       return {
         ...state,
-        username: action.user.username,
-        points: action.user.points,
+        currentUser: action.users.find(user => user.id === state.userId),
+        users: action.users,
       };
     case MANAGE_POINTS:
       return {

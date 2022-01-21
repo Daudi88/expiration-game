@@ -4,15 +4,15 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../data/firebase-config";
-import * as userActions from "../store/actions/userActions";
+import * as userActions from "../store/actions/usersActions";
 
 import StartupScreen from "../screens/StartupScreen";
 import AuthScreen from "../screens/AuthScreen";
 import { TabsNavigator } from "./TabNavigator";
 
 const AppNavigator = () => {
-  const isAuth = useSelector(state => !!state.user.userId);
-  const didTryAutoLogin = useSelector(state => !!state.user.tryAutoLogin);
+  const isAuth = useSelector(state => !!state.users.userId);
+  const didTryAutoLogin = useSelector(state => !!state.users.tryAutoLogin);
 
   const dispatch = useDispatch();
 

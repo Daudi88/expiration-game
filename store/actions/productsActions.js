@@ -7,7 +7,7 @@ import {
   deleteDoc,
   doc,
 } from "firebase/firestore";
-import { db } from "../../data/firebase-config";
+import { auth, db } from "../../data/firebase-config";
 import Product from "../../models/product";
 
 export const SET_PRODUCTS = "GET_PRODUCTS";

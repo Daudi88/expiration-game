@@ -3,14 +3,13 @@ import { signOut } from "firebase/auth";
 import { auth } from "../data/firebase-config";
 import { useDispatch, useSelector } from "react-redux";
 import * as Haptics from "expo-haptics";
-import * as userActions from "../store/actions/userActions";
+import * as userActions from "../store/actions/usersActions";
 import CustomButton from "../components/CustomButton";
 import CustomText from "../components/CustomText";
 import Colors from "../constants/Colors";
 
 const AccountScreen = () => {
-  const username = useSelector(state => state.user.username);
-  const points = useSelector(state => state.user.points);
+  const user = useSelector(state => state.users.currentUser);
   const dispatch = useDispatch();
 
   const handleSignOut = () => {
@@ -28,13 +27,13 @@ const AccountScreen = () => {
         Du har{" "}
         <CustomText
           bold
-          style={{ color: points >= 0 ? Colors.primary : "red" }}
+          style={{ color: user.score >= 0 ? Colors.primary : "red" }}
         >
-          {points}
+          {user.score}
         </CustomText>{" "}
         poäng
       </CustomText>
-      <CustomText style={styles.text}>Inloggad som: {username}</CustomText>
+      <CustomText style={styles.text}>Inloggad som: {user.username}</CustomText>
       <CustomButton
         style={{ backgroundColor: "red" }}
         title="Logga ut"

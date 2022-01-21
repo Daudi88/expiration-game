@@ -4,6 +4,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import ProductsScreen from "../screens/ProductsScreen";
 import AccountScreen from "../screens/AccountScreen";
 import Colors from "../constants/Colors";
+import LeaderboardScreen from "../screens/LeaderboardScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -19,6 +20,9 @@ export const TabsNavigator = () => {
           switch (route.name) {
             case "Products":
               iconName = "list";
+              break;
+            case "Leaderboard":
+              iconName = "trophy";
               break;
             case "Account":
               iconName = "user-alt";
@@ -42,6 +46,11 @@ export const TabsNavigator = () => {
         name="Products"
         component={ProductsScreen}
         options={{ title: "Matvaror" }}
+      />
+      <Tab.Screen
+        name="Leaderboard"
+        component={LeaderboardScreen}
+        options={{ title: "Topplistan" }}
       />
       <Tab.Screen
         name="Account"

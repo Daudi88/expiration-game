@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Alert,
   Keyboard,
@@ -19,6 +19,8 @@ import CustomButton from "../components/CustomButton";
 import Colors from "../constants/Colors";
 import Link from "../components/Link";
 import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+import { useDispatch, useSelector } from "react-redux";
+import * as usersActions from "../store/actions/usersActions";
 
 const AuthScreen = () => {
   const [email, setEmail] = useState("");

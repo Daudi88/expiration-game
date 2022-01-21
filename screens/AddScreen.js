@@ -30,7 +30,7 @@ const AddScreen = props => {
   const [isScanned, setIsScanned] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [error, setError] = useState(null);
-  const userId = useSelector(state => state.user.userId);
+  const user = useSelector(state => state.users.currentUser);
   const dispatch = useDispatch();
 
   const submitHandler = () => {
@@ -49,7 +49,7 @@ const AddScreen = props => {
     try {
       dispatch(
         productsActions.addProductToUser(
-          userId,
+          user.id,
           product.ean,
           product.title,
           product.imageUrl,

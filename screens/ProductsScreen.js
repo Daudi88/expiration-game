@@ -19,7 +19,7 @@ import ProductCard from "../components/ProductCard";
 import AddScreen from "./AddScreen";
 import CustomButton from "../components/CustomButton";
 import * as productsActions from "../store/actions/productsActions";
-import * as userActions from "../store/actions/userActions";
+import * as userActions from "../store/actions/usersActions";
 import Colors from "../constants/Colors";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
@@ -28,8 +28,7 @@ const ProductsScreen = ({ navigation }) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const userId = useSelector(state => state.user.userId);
-  const currentPoints = useSelector(state => state.user.points);
+  const user = useSelector(state => state.users.currentUser);
   const products = useSelector(state => state.products.userProducts);
   const dispatch = useDispatch();
 
@@ -45,7 +44,7 @@ const ProductsScreen = ({ navigation }) => {
     setError(null);
     setIsRefreshing(true);
     try {
-      dispatch(productsActions.fetchProducts(userId));
+      dispatch(productsActions.fetchProducts(user.id));
     } catch (error) {
       setError("Någonting gick fel!\nDra för att uppdatera");
     } finally {
@@ -55,8 +54,8 @@ const ProductsScreen = ({ navigation }) => {
 
   useEffect(() => {
     setIsLoading(true);
+    dispatch(userActions.fetchUsers());
     loadProducts().then(() => setIsLoading(false));
-    dispatch(userActions.fetchUser(userId));
   }, [loadProducts]);
 
   useEffect(() => {
@@ -112,8 +111,8 @@ const ProductsScreen = ({ navigation }) => {
   const handleProductDelete = (index, newPoints) => {
     const product = products[index];
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    dispatch(productsActions.removeProductFromUser(userId, product.id));
-    dispatch(userActions.managePoints(userId, currentPoints + newPoints));
+    dispatch(productsActions.removeProductFromUser(user.id, product.id));
+    dispatch(userActions.managePoints(user.id, user.points + newPoints));
   };
 
   if (isLoading) {
@@ -172,7 +171,7 @@ const ProductsScreen = ({ navigation }) => {
         animationType="slide"
         visible={showModal}
       >
-        <AddScreen setShowModal={setShowModal} userId={userId} />
+        <AddScreen setShowModal={setShowModal} userId={user.id} />
       </Modal>
     </SafeAreaView>
   );
@@ -181,16 +180,16 @@ const ProductsScreen = ({ navigation }) => {
 export default ProductsScreen;
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    backgroundColor: Colors.secondary,
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+  },
   centered: {
     flex: 1,
     backgroundColor: Colors.secondary,
     justifyContent: "center",
     alignItems: "center",
-  },
-  screen: {
-    flex: 1,
-    backgroundColor: Colors.secondary,
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   addButton: {
     position: "absolute",
