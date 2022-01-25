@@ -22,7 +22,8 @@ import * as productsActions from "../store/actions/productsActions";
 import * as usersActions from "../store/actions/usersActions";
 import Colors from "../constants/Colors";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { auth } from "../data/firebase-config";
+import { auth, db } from "../data/firebase-config";
+import { doc, updateDoc } from "firebase/firestore";
 
 const ProductsScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -112,11 +113,14 @@ const ProductsScreen = ({ navigation }) => {
     );
   };
 
-  const handleProductDelete = (index, newPoints) => {
+  const handleProductDelete = async (index, points) => {
     const product = products[index];
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    dispatch(productsActions.removeProductFromUser(userId, product.id));
-    dispatch(usersActions.managePoints(userId, user.points + newPoints));
+    dispatch(productsActions.removeProductFromUser(user.id, product.id));
+    await updateDoc(doc(db, "users", user.id), {
+      score: user.score + points,
+    });
+    dispatch(usersActions.fetchUsers());
   };
 
   if (isLoading) {

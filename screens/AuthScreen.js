@@ -131,13 +131,6 @@ const AuthScreen = () => {
               color={Colors.primary}
             />
           </View>
-          <Input
-            value={email}
-            placeholder="E-postadress"
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
           {isRegister && (
             <Input
               value={username}
@@ -146,6 +139,13 @@ const AuthScreen = () => {
               autoCapitalize="words"
             />
           )}
+          <Input
+            value={email}
+            placeholder="E-postadress"
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
           <Input
             value={password}
             placeholder="Lösenord"

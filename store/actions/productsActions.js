@@ -77,7 +77,7 @@ export const addProductToUser = (
 export const removeProductFromUser = (userId, productId) => {
   return async dispatch => {
     try {
-      await deleteDoc(doc(db, userId, productId));
+      await deleteDoc(doc(db, `users/${userId}/products`, productId));
       dispatch({ type: REMOVE_PRODUCT_FROM_USER, productId: productId });
     } catch (error) {
       throw new Error(error);

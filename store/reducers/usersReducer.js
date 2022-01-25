@@ -1,5 +1,6 @@
+import { auth } from "../../data/firebase-config";
 import {
-  MANAGE_POINTS,
+  MANAGE_SCORE,
   ADD_USER_ID,
   TRY_AUTO_LOGIN,
   SET_USERS,
@@ -8,7 +9,6 @@ import {
 const initialState = {
   userId: null,
   tryAutoLogin: false,
-  currentUser: {},
   users: [],
 };
 
@@ -29,11 +29,6 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         users: action.users,
-      };
-    case MANAGE_POINTS:
-      return {
-        ...state,
-        points: action.points,
       };
     default:
       return state;
