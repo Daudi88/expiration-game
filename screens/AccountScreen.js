@@ -10,7 +10,7 @@ import Colors from "../constants/Colors";
 
 const AccountScreen = () => {
   const user = useSelector(state =>
-    state.users.users.find(user => user.id === auth.currentUser.uid)
+    state.users.users.find(user => user.id === auth.currentUser?.uid)
   );
   const dispatch = useDispatch();
 

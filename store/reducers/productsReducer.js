@@ -1,7 +1,7 @@
 import {
   ADD_PRODUCT_TO_USER,
   REMOVE_PRODUCT_FROM_USER,
-  SET_PRODUCTS,
+  FETCH_PRODUCTS,
 } from "../actions/productsActions";
 import Product from "../../models/product";
 
@@ -11,7 +11,7 @@ const initialState = {
 
 const productsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_PRODUCTS:
+    case FETCH_PRODUCTS:
       return {
         userProducts: action.products,
       };

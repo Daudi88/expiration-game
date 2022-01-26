@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Alert,
   Keyboard,
@@ -9,8 +9,10 @@ import {
 import * as Haptics from "expo-haptics";
 import {
   createUserWithEmailAndPassword,
+  sendEmailVerification,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
 import { auth, db } from "../data/firebase-config";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -19,8 +21,6 @@ import CustomButton from "../components/CustomButton";
 import Colors from "../constants/Colors";
 import Link from "../components/Link";
 import { collection, doc, getDocs, setDoc } from "firebase/firestore";
-import { useDispatch, useSelector } from "react-redux";
-import * as usersActions from "../store/actions/usersActions";
 
 const AuthScreen = () => {
   const [email, setEmail] = useState("");
@@ -28,6 +28,11 @@ const AuthScreen = () => {
   const [password, setPassword] = useState("");
   const [isRegister, setIsRegister] = useState(true);
 
+  /**
+   * If the user chooses to register as a new user the username is checked separately
+   * before the email address and password is checked since they
+   * @returns
+   */
   const checkUsername = async () => {
     if (username.length === 0) {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
@@ -62,8 +67,9 @@ const AuthScreen = () => {
         const user = userCredential.user;
         setDoc(doc(db, "users", user.uid), {
           username: username,
-          points: 0,
+          score: 0,
         });
+        sendEmailVerification(user);
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       })
       .catch(error => {
@@ -89,9 +95,19 @@ const AuthScreen = () => {
 
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
-      .then(() =>
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
-      )
+      .then(userCredentials => {
+        const user = userCredentials.user;
+        if (!user.emailVerified) {
+          Alert.alert(
+            "Overifierad E-post",
+            "Du måste verifiera din epostadress innan du kan logga in.",
+            [{ text: "Okej" }]
+          );
+          signOut(auth);
+        }
+
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      })
       .catch(() => {
         Alert.alert("Varning", "Ogiltig e-postadress eller lösenord.", [
           { text: "Okej" },

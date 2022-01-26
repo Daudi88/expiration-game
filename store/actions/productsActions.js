@@ -8,17 +8,18 @@ import {
 import { db } from "../../data/firebase-config";
 import Product from "../../models/product";
 
-export const SET_PRODUCTS = "GET_PRODUCTS";
+export const FETCH_PRODUCTS = "FETCH_PRODUCTS";
 export const ADD_PRODUCT_TO_USER = "ADD_PRODUCT_TO_USER";
 export const REMOVE_PRODUCT_FROM_USER = "REMOVE_PRODUCT_FROM_USER";
 
+/**
+ * Fetches all products for the specific user and stores them in the Redux store
+ * @param {*} userId
+ * @returns
+ */
 export const fetchProducts = userId => {
-  console.log(userId);
   return async dispatch => {
     const userProducts = [];
-
-    // Gets the ean codes for the user into an array.
-    // Starts to build product objects based on the data.
     const querySnapshot = await getDocs(
       collection(db, `users/${userId}/products`)
     );
@@ -35,10 +36,19 @@ export const fetchProducts = userId => {
       );
     });
 
-    dispatch({ type: SET_PRODUCTS, products: userProducts });
+    dispatch({ type: FETCH_PRODUCTS, products: userProducts });
   };
 };
 
+/**
+ * Adds a new product to a specific user and stores it in the Redux store.
+ * @param {*} userId
+ * @param {*} title
+ * @param {*} imageUrl
+ * @param {*} weight
+ * @param {*} expirationDate
+ * @returns
+ */
 export const addProductToUser = (
   userId,
   title,
@@ -74,6 +84,12 @@ export const addProductToUser = (
   };
 };
 
+/**
+ * Removes a product from a specific user and updates the Redux store accordingly.
+ * @param {*} userId
+ * @param {*} productId
+ * @returns
+ */
 export const removeProductFromUser = (userId, productId) => {
   return async dispatch => {
     try {

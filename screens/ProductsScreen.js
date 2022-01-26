@@ -17,12 +17,12 @@ import Error from "../components/Error";
 import Header from "../components/Header";
 import ProductCard from "../components/ProductCard";
 import AddScreen from "./AddScreen";
-import CustomButton from "../components/CustomButton";
+import IconButton from "../components/IconButton";
 import * as productsActions from "../store/actions/productsActions";
 import * as usersActions from "../store/actions/usersActions";
 import Colors from "../constants/Colors";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { auth, db } from "../data/firebase-config";
+import { db } from "../data/firebase-config";
 import { doc, updateDoc } from "firebase/firestore";
 
 const ProductsScreen = ({ navigation }) => {
@@ -97,22 +97,6 @@ const ProductsScreen = ({ navigation }) => {
     prevOpenedRow = row[index];
   };
 
-  const renderProduct = itemData => {
-    return (
-      <ProductCard
-        index={itemData.index}
-        length={products.length}
-        image={itemData.item.imageUrl}
-        title={itemData.item.title}
-        weight={itemData.item.weight}
-        expirationDate={itemData.item.expirationDate}
-        onProductDelete={handleProductDelete}
-        closeRow={closeRow}
-        row={row}
-      />
-    );
-  };
-
   const handleProductDelete = async (index, points) => {
     const product = products[index];
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -156,15 +140,27 @@ const ProductsScreen = ({ navigation }) => {
           data={products.sort(
             (a, b) => new Date(a.expirationDate) - new Date(b.expirationDate)
           )}
-          renderItem={renderProduct}
           scrollEventThrottle={16}
           onScroll={Animated.event(
             [{ nativeEvent: { contentOffset: { y: yOffset } } }],
             { useNativeDriver: true }
           )}
+          renderItem={itemData => (
+            <ProductCard
+              index={itemData.index}
+              length={products.length}
+              image={itemData.item.imageUrl}
+              title={itemData.item.title}
+              weight={itemData.item.weight}
+              expirationDate={itemData.item.expirationDate}
+              onProductDelete={handleProductDelete}
+              closeRow={closeRow}
+              row={row}
+            />
+          )}
         />
       </GestureHandlerRootView>
-      <CustomButton
+      <IconButton
         style={styles.addButton}
         iconName="plus"
         size={30}
