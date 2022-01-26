@@ -70,6 +70,7 @@ const AuthScreen = () => {
           score: 0,
         });
         sendEmailVerification(user);
+        setIsRegister(false);
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       })
       .catch(error => {
