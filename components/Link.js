@@ -2,15 +2,11 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import CustomText from "./CustomText";
 import Colors from "../constants/Colors";
 
-const Link = props => {
+const Link = ({ title, onPress }) => {
   return (
-    <TouchableOpacity
-      style={styles.link}
-      activeOpacity={0.5}
-      onPress={props.onPress}
-    >
+    <TouchableOpacity style={styles.link} activeOpacity={0.5} onPress={onPress}>
       <CustomText bold style={styles.linkText}>
-        {props.title}
+        {title}
       </CustomText>
     </TouchableOpacity>
   );

@@ -38,11 +38,7 @@ const AccountScreen = () => {
       <CustomText style={styles.text}>
         Inloggad som: {user?.username}
       </CustomText>
-      <CustomButton
-        style={{ backgroundColor: "red" }}
-        title="Logga ut"
-        onPress={handleSignOut}
-      />
+      <CustomButton color="red" title="Logga ut" onPress={handleSignOut} />
     </View>
   );
 };

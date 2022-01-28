@@ -1,5 +1,11 @@
-import { useEffect, useRef, useState } from "react";
-import { Animated, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { useEffect, useRef } from "react";
+import {
+  Animated,
+  SafeAreaView,
+  StyleSheet,
+  View,
+  StatusBar,
+} from "react-native";
 import { useSelector } from "react-redux";
 import Header from "../components/Header";
 import CustomText from "../components/CustomText";

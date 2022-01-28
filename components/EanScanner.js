@@ -7,7 +7,7 @@ import axios from "axios";
 // From official docs https://reactnative.dev/docs/dimensions
 const windowWidth = Dimensions.get("window").width;
 
-const EanScanner = props => {
+const EanScanner = ({ isScanned, setIsScanned, setProduct, setError }) => {
   const [hasPermissions, setHasPermissions] = useState();
 
   useEffect(() => {
@@ -25,14 +25,14 @@ const EanScanner = props => {
    * @param {*} type, data
    */
   const barCodeScannedHandler = async ({ data }) => {
-    props.setIsScanned(true);
+    setIsScanned(true);
     axios
       .get(
         `https://api.dabas.com/DABASService/V2/article/gtin/0${data}/JSON?apikey=${DABAS_API_KEY}`
       )
       .then(response => {
         if (response.data !== "") {
-          props.setProduct(prevState => ({
+          setProduct(prevState => ({
             ...prevState,
             title: response.data?.Artikelbenamning,
             imageUrl: response.data?.Bilder[0].Lank,
@@ -44,11 +44,11 @@ const EanScanner = props => {
           );
         }
 
-        props.setError(null);
+        setError(null);
       })
       .catch(error => {
-        props.setError(error.message);
-        props.setProduct(prevState => ({
+        setError(error.message);
+        setProduct(prevState => ({
           ...prevState,
           title: "",
           imageUrl: "",
@@ -63,9 +63,7 @@ const EanScanner = props => {
         <View style={styles.barCodeContainer}>
           <BarCodeScanner
             barCodeTypes={[BarCodeScanner.Constants.BarCodeType.ean13]}
-            onBarCodeScanned={
-              props.isScanned ? undefined : barCodeScannedHandler
-            }
+            onBarCodeScanned={isScanned ? undefined : barCodeScannedHandler}
             style={{ width: windowWidth, height: 500 }}
           />
         </View>

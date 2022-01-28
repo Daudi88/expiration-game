@@ -1,17 +1,18 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import Colors from "../constants/Colors";
 
-const IconButton = props => {
+const IconButton = ({ name, size, color, onPress, style }) => {
   return (
     <TouchableOpacity
       activeOpacity={0.8}
-      style={[styles.iconButton, props.style]}
-      onPress={props.onPress}
+      style={[styles.iconButton, style]}
+      onPress={onPress}
     >
       <MaterialCommunityIcons
-        name={props.iconName}
-        size={props.size}
-        color={props.color}
+        name={name}
+        size={size}
+        color={color ? color : Colors.primary}
       />
     </TouchableOpacity>
   );

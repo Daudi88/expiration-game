@@ -1,7 +1,6 @@
 import { View, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { Swipeable } from "react-native-gesture-handler";
-import * as Haptics from "expo-haptics";
 import CustomText from "./CustomText";
 import Colors from "../constants/Colors";
 
@@ -49,7 +48,7 @@ const ProductCard = props => {
   }
 
   // https://www.youtube.com/watch?v=JxN9W9PRlUQ
-  const LeftActions = () => {
+  const LeftAction = () => {
     return (
       <View style={[styles.actionContainer, styles.leftActionContainer]}>
         <TouchableOpacity
@@ -107,13 +106,7 @@ const ProductCard = props => {
   };
 
   return (
-    <TouchableOpacity
-      style={styles.itemWrapper}
-      activeOpacity={0.8}
-      onPress={() => {
-        Haptics.selectionAsync();
-      }}
-    >
+    <View style={styles.itemWrapper}>
       <View
         style={[
           styles.itemContainer,
@@ -125,7 +118,7 @@ const ProductCard = props => {
         ]}
       >
         <Swipeable
-          renderLeftActions={LeftActions}
+          renderLeftActions={LeftAction}
           renderRightActions={RightActions}
           overshootLeft={false}
           overshootRight={false}
@@ -140,9 +133,7 @@ const ProductCard = props => {
                 style={styles.image}
                 source={
                   props.image === ""
-                    ? {
-                        uri: "https://static.vecteezy.com/system/resources/previews/004/458/389/non_2x/dairy-products-flat-linear-long-shadow-icon-yogurt-bottle-and-glass-of-milk-eggs-and-cheese-grocery-store-items-line-symbol-vector.jpg",
-                      }
+                    ? require("../assets/app-logo.png")
                     : { uri: props.image }
                 }
               />
@@ -164,7 +155,7 @@ const ProductCard = props => {
           </View>
         </Swipeable>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 

@@ -1,10 +1,10 @@
 import { StyleSheet } from "react-native";
 import CustomText from "./CustomText";
 
-const Error = props => {
+const Error = ({ message }) => {
   return (
     <CustomText bold style={styles.error}>
-      {props.message}
+      {message}
     </CustomText>
   );
 };

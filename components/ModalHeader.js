@@ -1,18 +1,18 @@
 import { StyleSheet, View } from "react-native";
-import CustomButton from "./CustomButton";
+import IconButton from "./IconButton";
 import CustomText from "./CustomText";
 
-const ModalHeader = props => {
+const ModalHeader = ({ title, onCancel }) => {
   return (
     <View style={styles.header}>
-      <CustomButton
+      <IconButton
         style={styles.cancelButton}
-        iconName="close-circle-outline"
+        name="close-circle-outline"
         size={35}
-        onPress={props.onCancel}
+        onPress={onCancel}
       />
       <CustomText bold style={styles.title}>
-        {props.title}
+        {title}
       </CustomText>
     </View>
   );

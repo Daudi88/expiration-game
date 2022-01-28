@@ -1,8 +1,8 @@
 import { StyleSheet, Text } from "react-native";
 import Colors from "../constants/Colors";
 
-const Header = props => {
-  return <Text style={styles.header}>{props.title}</Text>;
+const Header = ({ title }) => {
+  return <Text style={styles.header}>{title}</Text>;
 };
 
 const styles = StyleSheet.create({

@@ -6,7 +6,10 @@ const CustomButton = props => {
   return (
     <TouchableOpacity
       activeOpacity={0.8}
-      style={[styles.button, props.style]}
+      style={[
+        styles.button,
+        { backgroundColor: props.color ? props.color : Colors.primary },
+      ]}
       onPress={props.onPress}
     >
       <CustomText bold style={styles.title}>
@@ -18,9 +21,8 @@ const CustomButton = props => {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: Colors.primary,
-    paddingVertical: 12,
     width: "90%",
+    paddingVertical: 12,
     borderRadius: 10,
     margin: 5,
   },

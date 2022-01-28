@@ -147,22 +147,22 @@ const ProductsScreen = ({ navigation }) => {
           )}
           renderItem={itemData => (
             <ProductCard
-              index={itemData.index}
-              length={products.length}
               image={itemData.item.imageUrl}
               title={itemData.item.title}
               weight={itemData.item.weight}
               expirationDate={itemData.item.expirationDate}
               onProductDelete={handleProductDelete}
-              closeRow={closeRow}
+              index={itemData.index}
+              length={products.length}
               row={row}
+              closeRow={closeRow}
             />
           )}
         />
       </GestureHandlerRootView>
       <IconButton
         style={styles.addButton}
-        iconName="plus"
+        name="plus"
         size={30}
         color="white"
         onPress={() => {

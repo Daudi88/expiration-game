@@ -8,7 +8,7 @@ const CustomText = props => {
   }
 
   return (
-    <Text numberOfLines={props.numberOfLines} style={[fontWeight, props.style]}>
+    <Text {...props} style={[fontWeight, props.style]}>
       {props.children}
     </Text>
   );

@@ -6,18 +6,21 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
+  TouchableOpacity,
+  TextInput,
 } from "react-native";
 import * as Haptics from "expo-haptics";
 import { useDispatch, useSelector } from "react-redux";
 import * as productsActions from "../store/actions/productsActions";
 import ModalHeader from "../components/ModalHeader";
 import EanScanner from "../components/EanScanner";
-import Input from "../components/Input";
 import DatePicker from "../components/DatePicker";
 import CustomButton from "../components/CustomButton";
+import CustomText from "../components/CustomText";
 import Error from "../components/Error";
 import Link from "../components/Link";
 import { auth } from "../data/firebase-config";
+import Colors from "../constants/Colors";
 
 const AddScreen = props => {
   const [product, setProduct] = useState({
@@ -98,22 +101,38 @@ const AddScreen = props => {
                 />
               )}
               {error && <Error message={error} />}
-              <Input
-                value={product.title}
-                placeholder="Namn"
-                autoCapitalize="words"
-                onChangeText={text => {
-                  productChangeHandler("title", text);
-                  productChangeHandler("imageUrl", "");
-                  productChangeHandler("weight", 10);
-                  setError(null);
-                }}
-              />
-              <Input
-                value={product.expirationDate}
-                placeholder="Bäst före"
-                onInputPress={() => setShowDatePicker(true)}
-              />
+              <View style={styles.inputContainer}>
+                <TextInput
+                  autoCapitalize="words"
+                  style={styles.input}
+                  value={product.title}
+                  placeholder="Namn"
+                  placeholderTextColor="#aaa"
+                  onChangeText={text => {
+                    productChangeHandler("title", text);
+                    productChangeHandler("imageUrl", "");
+                    productChangeHandler("weight", 10);
+                    setError(null);
+                  }}
+                />
+                <TouchableOpacity
+                  style={styles.input}
+                  activeOpacity={0.5}
+                  onPress={() => setShowDatePicker(true)}
+                >
+                  <CustomText
+                    style={{
+                      color:
+                        product.expirationDate.length > 0 ? "black" : "#aaa",
+                      fontSize: 18,
+                    }}
+                  >
+                    {product.expirationDate.length > 0
+                      ? product.expirationDate
+                      : "Bäst före"}
+                  </CustomText>
+                </TouchableOpacity>
+              </View>
               <DatePicker
                 show={showDatePicker}
                 setShow={setShowDatePicker}
@@ -139,5 +158,17 @@ const styles = StyleSheet.create({
   },
   centered: {
     alignItems: "center",
+  },
+  inputContainer: {
+    alignItems: "center",
+    width: "92%",
+  },
+  input: {
+    width: "100%",
+    backgroundColor: Colors.secondary,
+    borderRadius: 10,
+    padding: 16,
+    margin: 5,
+    fontSize: 18,
   },
 });

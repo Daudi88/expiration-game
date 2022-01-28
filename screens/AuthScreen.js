@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   View,
+  TextInput,
 } from "react-native";
 import * as Haptics from "expo-haptics";
 import {
@@ -16,7 +17,6 @@ import {
 } from "firebase/auth";
 import { auth, db } from "../data/firebase-config";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import Input from "../components/Input";
 import CustomButton from "../components/CustomButton";
 import Colors from "../constants/Colors";
 import Link from "../components/Link";
@@ -141,34 +141,39 @@ const AuthScreen = () => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.screen}>
         <View style={styles.centered}>
-          <View style={styles.IconContainer}>
+          <View style={styles.iconContainer}>
             <MaterialCommunityIcons
               name="account-circle"
               size={100}
               color={Colors.primary}
             />
           </View>
-          {isRegister && (
-            <Input
-              value={username}
-              placeholder="Användarnamn"
-              onChangeText={setUsername}
-              autoCapitalize="words"
+          <View style={styles.inputContainer}>
+            {isRegister && (
+              <TextInput
+                style={styles.input}
+                value={username}
+                placeholder="Användarnamn"
+                onChangeText={setUsername}
+                autoCapitalize="words"
+              />
+            )}
+            <TextInput
+              style={styles.input}
+              value={email}
+              placeholder="E-postadress"
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
             />
-          )}
-          <Input
-            value={email}
-            placeholder="E-postadress"
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
-          <Input
-            value={password}
-            placeholder="Lösenord"
-            onChangeText={setPassword}
-            secureTextEntry
-          />
+            <TextInput
+              style={styles.input}
+              value={password}
+              placeholder="Lösenord"
+              onChangeText={setPassword}
+              secureTextEntry
+            />
+          </View>
         </View>
         {!isRegister && (
           <Link title="Glömt lösenordet?" onPress={handlePasswordReset} />
@@ -199,7 +204,19 @@ const styles = StyleSheet.create({
   centered: {
     alignItems: "center",
   },
-  IconContainer: {
+  iconContainer: {
     margin: 15,
+  },
+  inputContainer: {
+    alignItems: "center",
+    width: "92%",
+  },
+  input: {
+    width: "100%",
+    backgroundColor: Colors.secondary,
+    borderRadius: 10,
+    padding: 16,
+    margin: 5,
+    fontSize: 18,
   },
 });
