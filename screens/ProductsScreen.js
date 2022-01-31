@@ -5,9 +5,7 @@ import {
   SafeAreaView,
   Modal,
   StatusBar,
-  ActivityIndicator,
   ScrollView,
-  View,
   RefreshControl,
   Animated,
 } from "react-native";
@@ -26,7 +24,6 @@ import { db } from "../data/firebase-config";
 import { doc, updateDoc } from "firebase/firestore";
 
 const ProductsScreen = ({ navigation }) => {
-  const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -58,9 +55,8 @@ const ProductsScreen = ({ navigation }) => {
   }, [dispatch]);
 
   useEffect(() => {
-    setIsLoading(true);
     dispatch(usersActions.fetchUsers());
-    loadProducts().then(() => setIsLoading(false));
+    loadProducts();
   }, [loadProducts]);
 
   useEffect(() => {
@@ -106,14 +102,6 @@ const ProductsScreen = ({ navigation }) => {
     });
     dispatch(usersActions.fetchUsers());
   };
-
-  if (isLoading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color={Colors.primary} />
-      </View>
-    );
-  }
 
   if (error) {
     return (

@@ -28,7 +28,7 @@ const LeaderboardScreen = ({ navigation }) => {
 
   const dispatch = useDispatch();
 
-  const loadProducts = useCallback(async () => {
+  const fetchUsers = useCallback(async () => {
     setError(null);
     setIsRefreshing(true);
     try {
@@ -64,7 +64,7 @@ const LeaderboardScreen = ({ navigation }) => {
       <ScrollView
         contentContainerStyle={styles.centered}
         refreshControl={
-          <RefreshControl onRefresh={loadProducts} refreshing={isRefreshing} />
+          <RefreshControl onRefresh={fetchUsers} refreshing={isRefreshing} />
         }
       >
         <Error message={error} />
@@ -107,7 +107,7 @@ const LeaderboardScreen = ({ navigation }) => {
       <Animated.FlatList
         data={users.sort((a, b) => a.score < b.score)}
         renderItem={renderUser}
-        onRefresh={loadProducts}
+        onRefresh={fetchUsers}
         refreshing={isRefreshing}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={<Header title="Topplistan" />}
