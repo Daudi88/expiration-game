@@ -25,7 +25,8 @@ const AccountScreen = () => {
 
   return (
     <View style={styles.screen}>
-      <CustomText bold style={{ fontSize: 20 }}>
+      <CustomText style={styles.text}>{user?.username}</CustomText>
+      <CustomText bold style={styles.text}>
         Du har{" "}
         <CustomText
           bold
@@ -35,10 +36,9 @@ const AccountScreen = () => {
         </CustomText>{" "}
         poäng
       </CustomText>
-      <CustomText style={styles.text}>
-        Inloggad som: {user?.username}
-      </CustomText>
-      <CustomButton color="red" title="Logga ut" onPress={handleSignOut} />
+      <View style={styles.button}>
+        <CustomButton color="red" title="Logga ut" onPress={handleSignOut} />
+      </View>
     </View>
   );
 };
@@ -48,12 +48,16 @@ export default AccountScreen;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    paddingTop: 20,
     backgroundColor: "white",
   },
   text: {
-    fontSize: 16,
-    margin: 10,
+    fontSize: 20,
+    marginHorizontal: 25,
+    marginBottom: 10,
+  },
+  button: {
+    width: "100%",
+    alignItems: "center",
   },
 });

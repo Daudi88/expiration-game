@@ -22,7 +22,7 @@ import Link from "../components/Link";
 import { auth } from "../data/firebase-config";
 import Colors from "../constants/Colors";
 
-const AddScreen = props => {
+const AddScreen = ({ setShowModal }) => {
   const [product, setProduct] = useState({
     title: "",
     imageUrl: "",
@@ -62,7 +62,7 @@ const AddScreen = props => {
         )
       );
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      props.setShowModal(false);
+      setShowModal(false);
     } catch (err) {
       setError(err.message);
     }
@@ -81,7 +81,7 @@ const AddScreen = props => {
               title="Ny vara"
               onCancel={() => {
                 Haptics.selectionAsync();
-                props.setShowModal(false);
+                setShowModal(false);
               }}
             />
             <View style={styles.centered}>

@@ -1,17 +1,23 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import {
   Animated,
   SafeAreaView,
   StyleSheet,
   View,
   StatusBar,
+  ScrollView,
+  RefreshControl,
 } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import * as usersActions from "../store/actions/usersActions";
 import Header from "../components/Header";
 import CustomText from "../components/CustomText";
+import Error from "../components/Error";
 import Colors from "../constants/Colors";
 
 const LeaderboardScreen = ({ navigation }) => {
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [error, setError] = useState(null);
   const users = useSelector(state => state.users.users);
   const yOffset = useRef(new Animated.Value(0)).current;
   const headerOpacity = yOffset.interpolate({
@@ -19,6 +25,20 @@ const LeaderboardScreen = ({ navigation }) => {
     outputRange: [0, 2],
     extrapolate: "clamp",
   });
+
+  const dispatch = useDispatch();
+
+  const loadProducts = useCallback(async () => {
+    setError(null);
+    setIsRefreshing(true);
+    try {
+      dispatch(usersActions.fetchUsers());
+    } catch (error) {
+      setError("Någonting gick fel!\nDra för att uppdatera");
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, [dispatch]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -38,6 +58,19 @@ const LeaderboardScreen = ({ navigation }) => {
       headerTransparent: true,
     });
   });
+
+  if (error) {
+    return (
+      <ScrollView
+        contentContainerStyle={styles.centered}
+        refreshControl={
+          <RefreshControl onRefresh={loadProducts} refreshing={isRefreshing} />
+        }
+      >
+        <Error message={error} />
+      </ScrollView>
+    );
+  }
 
   const renderUser = ({ item, index }) => {
     return (
@@ -74,6 +107,8 @@ const LeaderboardScreen = ({ navigation }) => {
       <Animated.FlatList
         data={users.sort((a, b) => a.score < b.score)}
         renderItem={renderUser}
+        onRefresh={loadProducts}
+        refreshing={isRefreshing}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={<Header title="Topplistan" />}
         scrollEventThrottle={16}
@@ -93,6 +128,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.secondary,
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+  },
+  centered: {
+    flex: 1,
+    backgroundColor: Colors.secondary,
+    justifyContent: "center",
+    alignItems: "center",
   },
   cardsContainer: {
     alignItems: "center",
